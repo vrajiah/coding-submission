@@ -17,6 +17,12 @@ Stack categories:
 - A package is **heavy** if:
   - Mass >= 20 kg
 
+### Assumptions
+- Dimensions and mass are integers; fractional values (e.g., 10.5 cm, 19.5 kg) are not supported — the caller is responsible for rounding.
+- Non-positive dimensions or mass are treated as invalid and return "REJECTED".
+- Units are fixed: dimensions in centimeters, mass in kilograms — no unit conversion is performed.
+- Thresholds are inclusive: exactly 1,000,000 cm³, exactly 150 cm, and exactly 20 kg are classified as bulky/heavy.
+
 ### Implementation
 Break down the problem into steps:
 1. The classification depends on two independent conditions: whether the package is bulky and whether it is heavy. 
@@ -43,7 +49,7 @@ We can determine these conditions separately and then combine the results to cla
 ### Edge Cases:
 - boundary values for dimensions and mass (e.g., exactly 1,000,000 cm³, exactly 20 kg)
 - very large dimensions that could cause overflow if not handled properly (use long for volume)
-- packages that are just below the thresholds to ensure correct classification (e.g., 999,999 cm³, 19.9 kg)
+- packages that are just below the thresholds to ensure correct classification (e.g., 999,999 cm³, 19 kg)
 - invalid inputs (e.g., negative dimensions or mass) - depending on requirements, we could either throw an exception or classify them as "REJECTED" since they don't meet valid criteria.
 
 ### Test Cases:
@@ -55,4 +61,4 @@ We can determine these conditions separately and then combine the results to cla
 6. **Boundary Case for Heavy**: `sort(10, 10, 10, 20)` should return "SPECIAL"
 7. **Bulky by Dimension**: `sort(150, 1, 1, 1)` should return "SPECIAL"
 8. **Rejected by Dimension**: `sort(150, 1, 1, 20)` should return "REJECTED"
-9. **Invalid Input**: `sort(-10, 10, 10, 5)` should return "REJECTED" (or throw an exception based on implementation choice)
+9. **Invalid Input**: `sort(-10, 10, 10, 5)` should return "REJECTED"
